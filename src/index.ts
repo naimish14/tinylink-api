@@ -13,14 +13,22 @@ const app = express();
 
 const httpServer = createServer(app);
 
+// Configure CORS for Socket.IO - allow all origins in development
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"]
+    origin: "*", // This allows all origins - you can restrict this later
+    methods: ["GET", "POST"],
+    credentials: false
   }
 });
 
-app.use(cors());
+// Configure CORS for Express - allow all origins
+app.use(cors({
+  origin: "*", // This allows all origins
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
 app.set('io', io);
